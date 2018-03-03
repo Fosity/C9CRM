@@ -1,0 +1,372 @@
+{% load static %}
+{% load  rbac %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ title }}</title>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet"
+		  type="text/css">
+	<link rel="stylesheet" href="{% static 'carry/css/bootstrap.min.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'carry/css/nifty.min.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'carry/icons/line-icons/premium-line-icons.min.css' %}" type="text/css"/>
+	<link rel="stylesheet" href="{% static 'carry/icons/solid-icons/premium-solid-icons.min.css' %}" type="text/css"/>
+	<link rel="stylesheet" href="{% static 'carry/plugins/pace/pace.min.css' %}" type="text/css"/>
+	<script src="{% static 'carry/plugins/pace/pace.min.js' %}" type="text/javascript"></script>
+	<script src="{% static 'carry/js/jquery.min.js' %}" type="text/javascript"></script>
+	<script src="{% static 'carry/js/bootstrap.min.js' %}" type="text/javascript"></script>
+	<script src="{% static 'carry/js/nifty.min.js' %}" type="text/javascript"></script>
+	<style>
+		{
+		#
+		{
+		%
+		rbac_css
+		%
+		}
+		#
+		}
+	</style>
+	{% block css %}{% endblock %}
+</head>
+<body>
+<div id="container" class="effect aside-float aside-bright mainnav-lg">
+	<!--NAVBAR-->
+	<!--===================================================-->
+	<header id="navbar">
+		<div id="navbar-container" class="boxed">
+			<!--Brand logo & name-->
+			<!--================================-->
+			<div class="navbar-header">
+				<a href="{% url 'carry:index'%}" class="navbar-brand">
+					<div class="brand-title">
+						<span class="brand-text">CRM系统</span>
+					</div>
+				</a>
+			</div>
+			<!--================================-->
+			<!--End brand logo & name-->
+			<!--Navbar Dropdown-->
+			<!--================================-->
+			<div class="navbar-content clearfix">
+				<ul class="nav navbar-top-links pull-left">
+					<!--Navigation toogle button-->
+					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					<li class="tgl-menu-btn">
+						<a class="mainnav-toggle" href="#">
+							<i class="demo-pli-view-list"></i>
+						</a>
+					</li>
+					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					<!--End Navigation toogle button-->
+					<!--Notification dropdown-->
+					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					<li class="dropdown">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+							<i class="demo-pli-bell"></i>
+							<span class="badge badge-header badge-danger"></span>
+						</a>
+						<!--Notification dropdown menu-->
+						<div class="dropdown-menu dropdown-menu-md">
+							<div class="pad-all bord-btm">
+								<p class="text-semibold text-main mar-no">设置XXXX</p>
+							</div>
+							<div class="nano scrollable">
+								<div class="nano-content">
+									<ul class="head-list">
+										<!-- Dropdown list-->
+										<li>
+											<a href="#">
+												<div class="clearfix">
+													<p class="pull-left">Database Repair</p>
+													<p class="pull-right">70%</p>
+												</div>
+												<div class="progress progress-sm">
+													<div style="width: 70%;" class="progress-bar">
+														<span class="sr-only">70% Complete</span>
+													</div>
+												</div>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<!--Dropdown footer-->
+							<div class="pad-all bord-top">
+								<a href="#" class="btn-link text-dark box-block">
+									<i class="fa fa-angle-right fa-lg pull-right"></i>Show All Notifications
+								</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<ul class="nav navbar-top-links pull-right">
+					<!--End language selector-->
+					<!--User dropdown-->
+					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					<li id="dropdown-user" class="dropdown">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                                <span class="pull-right">
+                                    <!--<img class="img-circle img-user media-object" src="img/profile-photos/1.png" alt="Profile Picture">-->
+                                    <i class="demo-pli-male ic-user"></i>
+                                </span>
+							<div class="username hidden-xs">{{ request.session.user_info.username }}</div>
+						</a>
+						<div class="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
+							<!-- Dropdown heading  -->
+							<div class="pad-all bord-btm">
+							</div>
+							<!-- User dropdown menu -->
+							<ul class="head-list">
+								<li>
+									<a href="#">
+										<i class="demo-pli-male icon-lg icon-fw"></i> Profile
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<span class="badge badge-danger pull-right">9</span>
+										<i class="demo-pli-mail icon-lg icon-fw"></i> Messages
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<span class="label label-success pull-right">New</span>
+										<i class="demo-pli-gear icon-lg icon-fw"></i> Settings
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="demo-pli-information icon-lg icon-fw"></i> Help
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<i class="demo-pli-computer-secure icon-lg icon-fw"></i> Lock screen
+									</a>
+								</li>
+							</ul>
+							<!-- Dropdown footer -->
+							<div class="pad-all text-right">
+								<a href="{% url 'carry:logout' %}" class="btn btn-primary">
+									<i class="demo-pli-unlock"></i> Logout
+								</a>
+							</div>
+						</div>
+					</li>
+					<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+					<!--End user dropdown-->
+					<li>
+						<a href="#" class="aside-toggle navbar-aside-icon">
+							<i class="pci-ver-dots"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<!--================================-->
+			<!--End Navbar Dropdown-->
+		</div>
+	</header>
+	<!--===================================================-->
+	<!--END NAVBAR-->
+	<div class="boxed">
+		<!--CONTENT CONTAINER-->
+		<!--===================================================-->
+		<div id="content-container">
+			<!--Page Title-->
+			<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+			<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+			<!--End page title-->
+			<!--Page content-->
+			<!--===================================================-->
+			<div id="page-content">
+				{% block content %} {% endblock %}
+			</div>
+			<!--===================================================-->
+			<!--End page content-->
+		</div>
+		<!--===================================================-->
+		<!--END CONTENT CONTAINER-->
+		<!--ASIDE-->
+		<!--===================================================-->
+		<aside id="aside-container">
+			<div id="aside">
+				<div class="nano">
+					<div class="nano-content">
+					</div>
+				</div>
+			</div>
+		</aside>
+		<!--===================================================-->
+		<!--END ASIDE-->
+		<!--MAIN NAVIGATION-->
+		<!--===================================================-->
+		<nav id="mainnav-container">
+			<div id="mainnav">
+				<div id="mainnav-menu-wrap">
+					<div class="nano has-scrollbar">
+						<div class="nano-content">
+							<!--Profile Widget-->
+							<!--================================-->
+							<div id="mainnav-profile" class="mainnav-profile">
+								<div class="profile-wrap">
+									<div class="pad-btm">
+										<img class="img-circle img-sm img-border"
+											 src="{% static 'carry/img/profile-photos/1.png' %}"
+											 alt="Profile Picture">
+									</div>
+									<a href="#profile-nav" class="box-block" data-toggle="collapse"
+									   aria-expanded="false">
+                                            <span class="pull-right dropdown-toggle">
+                                                <i class="dropdown-caret"></i>
+                                            </span>
+										<p class="mnp-name">{{ request.session.user_info.username }}</p>
+										<span class="mnp-desc">{{ request.session.user_info.email }}</span>
+									</a>
+								</div>
+								<div id="profile-nav" class="collapse list-group bg-trans">
+									<a href="#" class="list-group-item">
+										<i class="demo-pli-male icon-lg icon-fw"></i> View Profile
+									</a>
+									<a href="#" class="list-group-item">
+										<i class="demo-pli-gear icon-lg icon-fw"></i> Settings
+									</a>
+									<a href="#" class="list-group-item">
+										<i class="demo-pli-information icon-lg icon-fw"></i> Help
+									</a>
+									<a href="{% url 'carry:logout' %}" class="list-group-item">
+										<i class="demo-pli-unlock icon-lg icon-fw"></i> Logout
+									</a>
+								</div>
+							</div>
+							<!--Shortcut buttons-->
+							<!--================================-->
+							<div id="mainnav-shortcut">
+								<ul class="list-unstyled">
+									<!--                                        <li class="col-xs-2" data-content="Button 1">
+                                                                                <a class="shortcut-grid" href="#" >
+                                                                                    <i class="demo-psi-home"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="col-xs-2" data-content="Button 2">
+                                                                                <a href="#" class="shortcut-grid">
+                                                                                    <i class="demo-psi-heart-2"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="col-xs-2" data-content="Button 3">
+                                                                                <a href="#" class="shortcut-grid">
+                                                                                    <i class="demo-psi-speech-bubble-3"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="col-xs-2" data-content="Button 4">
+                                                                                <a href="#" class="shortcut-grid">
+                                                                                    <i class="demo-psi-star"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="col-xs-2" data-content="Button 5">
+                                                                                <a href="#" class="shortcut-grid">
+                                                                                    <i class="demo-psi-male"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="col-xs-2" data-content="Button 6">
+                                                                                <a href="#" class="shortcut-grid">
+                                                                                    <i class="demo-psi-lock-2"></i>
+                                                                                </a>
+                                                                            </li>-->
+									<!--                                        <li class="col-xs-4" data-content="Like">
+                                                                                <div class="shortcut-grid">
+                                                                                    <i class="hide-sm demo-psi-facebook"></i>
+                                                                                    <span class="text-lg">152</span>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="col-xs-4" data-content="2,343 Mail">
+                                                                                <div class="shortcut-grid">
+                                                                                    <i class="demo-psi-mail"></i>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="col-xs-4" data-content="Followers">
+                                                                                <div class="shortcut-grid">
+                                                                                    <i class="hide-sm demo-psi-twitter"></i>
+                                                                                    <span class="text-lg">2K</span>
+                                                                                </div>
+                                                                            </li>-->
+									<li class="col-xs-3" data-content="My Profile">
+										<a class="shortcut-grid" href="#">
+											<i class="demo-psi-male"></i>
+										</a>
+									</li>
+									<li class="col-xs-3" data-content="Messages">
+										<a class="shortcut-grid" href="#">
+											<i class="demo-psi-speech-bubble-3"></i>
+										</a>
+									</li>
+									<li class="col-xs-3" data-content="Activity">
+										<a class="shortcut-grid" href="#">
+											<i class="demo-psi-thunder"></i>
+										</a>
+									</li>
+									<li class="col-xs-3" data-content="Lock Screen">
+										<a class="shortcut-grid" href="#">
+											<i class="demo-psi-lock-2"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<!--================================-->
+							<!--End shortcut buttons-->
+							<ul id="mainnav-menu" class="list-group">
+								{% rbac_menu request %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--
+            <a class="menu-item" href="#">
+                <i class="fa fa-desktop" aria-hidden="true"></i>
+                <span>日志管理</span>
+            </a>
+            -->
+		</nav>
+		<!--===================================================-->
+		<!--END MAIN NAVIGATION-->
+	</div>
+	<!-- FOOTER -->
+	<!--===================================================-->
+	<footer id="footer">
+		<!-- Visible when footer positions are fixed -->
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<div class="show-fixed pull-right">
+			You have <a href="#" class="text-bold text-main"><span class="label label-danger">3</span> pending
+			action.</a>
+		</div>
+		<!-- Visible when footer positions are static -->
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<div class="hide-fixed pull-right pad-rgt">
+			14GB of <strong>512GB</strong> Free.
+		</div>
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<!-- Remove the class "show-fixed" and "hide-fixed" to make the content always appears. -->
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		<p class="pad-lft">&#0169; 2017 Your Company</p>
+	</footer>
+	<!--===================================================-->
+	<!-- END FOOTER -->
+	<!-- SCROLL PAGE BUTTON -->
+	<!--===================================================-->
+	<button class="scroll-top btn">
+		<i class="pci-chevron chevron-up"></i>
+	</button>
+	<!--===================================================-->
+</div>
+<script>
+    $(function () {
+        {#        {%
+            rbac_js %
+        }#
+        }
+    });
+</script>
+{% block js %} {% endblock %}
+</body>
+</html>

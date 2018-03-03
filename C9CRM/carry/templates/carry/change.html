@@ -1,0 +1,19 @@
+{% extends 'carry/layout.html' %}
+{% load carry_form %}
+{% load rbac %}
+{% block css %}
+{% endblock %}
+{% block content %}
+<div id="page-title">
+	<h2 class="page-header text-overflow">
+		{% title_pre request %}
+	</h2>
+</div>
+<div id="page-content">
+	<div class="container">
+		{{ formf.username }}
+		<h1>修改数据</h1>
+		{% show_add_edit_form form %}
+	</div>
+</div>
+{% endblock %}
