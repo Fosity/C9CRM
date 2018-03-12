@@ -1,11 +1,9 @@
 # _*_coding:utf-8_*_
 # Author:xupan
+from django.forms.models import ModelChoiceField
 from django.template import Library
-from django.db.models import ForeignKey
-from django.db.models import ManyToManyField
-from types import FunctionType
 from django.urls import reverse
-from django.forms.models import ModelMultipleChoiceField, ModelChoiceField
+
 from carry.service import carry
 
 register = Library()

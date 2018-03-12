@@ -66,14 +66,14 @@ class PageInfo(object):
             self.page_param_dict['page'] = i
             if i == self.current_page:
                 temp = "<li class='active'><a  href='%s?%s'>%s</a></li>" % (
-                self.base_url, self.page_param_dict.urlencode(), i)
+                    self.base_url, self.page_param_dict.urlencode(), i)
             else:
                 temp = "<li><a href='%s?%s'>%s</a></li>" % (self.base_url, self.page_param_dict.urlencode(), i)
             page_list.append(temp)
         if len(page_list) == 1:
             self.page_param_dict['page'] = '1'
             temp = "<li class='active'><a  href='%s?%s'>%s</a></li>" % (
-            self.base_url, self.page_param_dict.urlencode(), 1,)
+                self.base_url, self.page_param_dict.urlencode(), 1,)
             page_list.append(temp)
         if self.current_page >= self.all_pager:
             nex = "<li><a href='#'>下一页</a></li>"

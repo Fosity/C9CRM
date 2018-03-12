@@ -1,11 +1,10 @@
-# _*_coding:utf-8_*_
-# Author:xupan
 # -*- coding:utf-8 -*-
-import re
 import os
+import re
+
 from django import template
-from django.utils.safestring import mark_safe
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -81,20 +80,10 @@ def title_pre(request):
     p, result = process_menu_tree_data(request)
     result.reverse()
     tpl = '>'.join(result)
-    print(tpl)
     return tpl
 
 
 def build_menu_tree_html(menu_list):
-    # tpl1 = """
-    #     <div class='rbac-menu-item'>
-    #         <div class='rbac-menu-header'>{0}</div>
-    #         <div class='rbac-menu-body {2}'>{1}</div>
-    #     </div>
-    # """
-    # tpl2 = """
-    #     <a href='{0}' class='{1}'>{2}</a>
-    # """
     tpl1 = """
 			<li class="list-divider"></li>
 	        <li {2}>

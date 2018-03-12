@@ -1,0 +1,29 @@
+{% extends 'carry/layout.html' %}
+{% load static %}
+{% block content %}
+
+    <form action="" method="post" novalidate>
+        {% csrf_token %}
+        {{ task_form }}
+        <input type="submit" value="提交">
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'kindeditor-4.1.10/kindeditor-all.js' %}"></script>
+    <script>
+        var editor;
+        KindEditor.ready(function (K) {
+            editor = K.create('#f1', {
+                width: "700px",
+                height: "300px",
+                resizeType: 1,
+                uploadJson: '{% url 'carry:upload_img' %}',
+                extraFileUploadParams: {
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                }
+            })
+        })
+
+    </script>
+{% endblock %}

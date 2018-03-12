@@ -3,16 +3,13 @@ import copy
 import json
 from types import FunctionType
 
-from django.conf import settings
 from django.db.models import ForeignKey, ManyToManyField
 from django.forms import ModelForm
 from django.http.request import QueryDict
 from django.shortcuts import redirect, render
-from django.template.response import TemplateResponse, SimpleTemplateResponse
+from django.template.response import SimpleTemplateResponse, TemplateResponse
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-
-from carry.utils.pageinfo import PageInfo
 
 
 def model_to_dict(instance, fields=None, exclude=None):
@@ -23,7 +20,7 @@ def model_to_dict(instance, fields=None, exclude=None):
     opts = instance._meta
     data = {}
     for f in chain(opts.concrete_fields, opts.private_fields, opts.many_to_many):
-        print(f, type(f))
+
         if not getattr(f, 'editable', False):
             continue
         if fields and f.name not in fields:
@@ -140,10 +137,12 @@ class ChangeList(object):
         all_count = result_list.count()
         query_params = copy.copy(request.GET)
         query_params._mutable = True
-        self.pager = PageInfo(self.request.GET.get('page'), all_count, per_page=settings.PER_PAGE_NUM,
-                              base_url=self.carry_modal.changelist_url(),
-                              page_param_dict=query_params)
-        self.result_list = result_list[self.pager.start:self.pager.end]
+        ############ 后端 分页功能，前端也具备了分页功能，
+        # self.pager = PageInfo(self.request.GET.get('page'), all_count, per_page=settings.PER_PAGE_NUM,
+        #                       base_url=self.carry_modal.changelist_url(),
+        #                       page_param_dict=query_params)
+        # self.result_list = result_list[self.pager.start:self.pager.end]
+        self.result_list = result_list
 
     def add_btn(self):
         """
@@ -228,12 +227,14 @@ class BaseCarryModal(object):
 
     # ########## CURD功能 ##########
     """1. 定制显示列表的Html模板"""
-    change_list_template = []
-    add_form_template = []
-    detail_template = []
-    change_form_template = []
+    change_list_template = []  # 列表查看
+    add_form_template = []  # 列表增加
+    detail_template = []  # 列表详细
+    change_form_template = []  # 列表修改
 
     """2. 定制列表中的筛选条件"""
+
+    # 定制表内元素的筛选条件
 
     def get_model_field_name_list(self):
         """
@@ -253,8 +254,10 @@ class BaseCarryModal(object):
         return [item.name for item in self.model_class._meta._get_fields()]
 
     def get_change_list_condition(self, query_params):
+        # 获取 对应 model 的所有字段
 
         field_list = self.get_all_model_field_name_list()
+        # 在get方法中，可以提前对数据进行筛选
         condition = {}
         for k in query_params:
             if k not in field_list:
@@ -264,6 +267,22 @@ class BaseCarryModal(object):
 
     """3. 定制数据列表开始"""
     list_display = "__all__"
+
+    def list_item_filter(self, request):
+        '''初始定制筛选条件'''
+        return [{}]
+
+    def list_item_filter_func(self, request):
+        from django.db.models import Q
+        list_item = self.list_item_filter(request)
+        search = Q()
+        for item in list_item:
+            search_and = Q()
+            search_and.connector = "AND"
+            for k, v in item.items():
+                search_and.children.append((k, v))
+            search.add(search_and, 'OR')
+        return search
 
     """4. 定制Action行为"""
 
@@ -311,7 +330,8 @@ class BaseCarryModal(object):
         :return:
         """
         self.request = request
-        result_list = self.model_class.objects.filter(**self.get_change_list_condition(request.GET))
+        result_list = self.model_class.objects.filter(self.list_item_filter_func(request),
+                                                      **self.get_change_list_condition(request.GET)).distinct()
 
         if request.method == "POST":
             """执行Action行为"""
@@ -414,7 +434,7 @@ class BaseCarryModal(object):
         context = {
             'form': form
         }
-        return TemplateResponse(request, self.change_form_template or [
+        return TemplateResponse(request, self.detail_template or [
             'carry/%s/%s/change.html' % (self.app_label, self.model_name),
             'carry/%s/change.html' % self.app_label,
             'carry/change.html'
@@ -431,13 +451,13 @@ class BaseCarryModal(object):
         fields = self.get_model_form_cls.Meta.fields
         if fields == '__all__':
             fields = self.get_model_field_name_list()
-        # print(self.get_model_field_name_list_m2m())
+        detail_content = {}
+
         for name in fields:
             val = getattr(row, name)
-        # print(name, val)
-
+            detail_content[name] = val
         context = {
-            'row': row
+            'row': detail_content
         }
         return TemplateResponse(request, self.change_form_template or [
             'carry/%s/%s/detail.html' % (self.app_label, self.model_name),

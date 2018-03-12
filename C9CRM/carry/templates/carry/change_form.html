@@ -12,7 +12,7 @@
 		<div class="col-sm-9" style="position: relative">
 			{{ col.item }}
 			{% if col.popup %}
-			<div style="position: absolute;right: -5px;top: 8px;z-index: 9999;"><a
+			<div style="position:absolute;right:55px;top:10px;z-index: 9999;"><a
 					href="javascript:openPopup('{{ col.popup_url }}');"
 					class="glyphicon glyphicon-search"></a></div>
 			{% endif %}
@@ -21,7 +21,7 @@
 	</div>
 	{% endfor %}
 	<div class="form-group">
-		<div class="col-sm-offset-10 col-sm-2">
+		<div class="col-sm-offset-2 col-sm-2">
 			<input type="submit" class="btn btn-primary" value="确认添加"/>
 		</div>
 	</div>
@@ -37,6 +37,6 @@
     }
 
     function openPopup(url) {
-        var popupPage = window.open(url, url, "status=1, height:500, width:600, toolbar=0, resizeable=0");
+        var popupPage = window.open(url, url, "status=1, height:500, width:500, toolbar=0, resizeable=0");
     }
 </script>

@@ -1,0 +1,191 @@
+{% extends 'carry/layout.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container">
+    <div class="col-md-2" id="dropdown">
+        <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="true" name="00">
+                全年信息
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="dropdownMenuul1">
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-10" id="createHighChart">
+    </div>
+    </div>
+    <div style="height:50px"></div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'Highcharts-5.0.12/code/highcharts.js' %}"></script>
+    <script src="{% static 'Highcharts-5.0.12/code/modules/exporting.js' %}"></script>
+    <script src="{% static 'Highcharts-5.0.12/code/highcharts-3d.js' %}"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                url: '{% url 'carry:report_ajax' %}',
+                type: "POST",
+                data:{'csrfmiddlewaretoken':"{{ csrf_token }}"},
+                dataType: 'JSON',
+                success: function (arg) {
+                    $("#dropdownMenuul1").empty();
+                    $.each(arg.all_task, function (k, v) {
+                        var litag = document.createElement("li");
+                        var atag = document.createElement("a");
+                        atag.innerText = v.menu;
+                        $(atag).attr('name', v.nid);
+                        $(atag).attr('show', v.show);
+                        $(litag).append(atag);
+                        $("#dropdownMenuul1").append(litag)
+                    });
+                    $("#dropdown").on('click', 'a', function () {
+                        var name_id = $(this).attr('name');
+                        var show_func = $(this).attr('show');
+                        var menu_text = $(this).text();
+                        $(this).parent().parent().prev('button').html(menu_text + '<span class="caret"></span>');
+                        $(this).parent().parent().prev('button').attr('name', name_id);
+                        $(this).parent().parent().prev('button').attr('show', show_func);
+                        $.ajax({
+                            url: "{% url 'carry:report_json' %}",
+                            type: "POST",
+                            data: {'menu1': name_id,'csrfmiddlewaretoken':"{{ csrf_token }}"},
+                            dataType: 'JSON',
+                            success: function (arg) {
+                                $("#createHighChart").empty();
+                                if (arg.data.type == 'pie') {
+                                    var divtag1 = document.createElement('div');
+                                    var divtag2 = document.createElement('div');
+                                    var divtag3 = document.createElement('div');
+                                    $(divtag1).attr('id', 'pie1');
+                                    $(divtag2).attr('id', 'pie2');
+                                    $(divtag3).attr('id', '3dHchart2');
+                                    $("#createHighChart").append(divtag1);
+                                    $("#createHighChart").append(divtag2);
+                                    $("#createHighChart").append(divtag3);
+                                    var x_label = Array();
+                                    $.each(arg.data.series.b.data, function (k, v) {
+                                        x_label.push(v[0])
+                                    });
+                                    var value_list = Array();
+                                    var value_list1 = Array();
+                                    $.each(arg.data.series, function (k, v) {
+                                        value_list.push(v);
+                                        var v_new={};
+                                        $.extend(true,v_new,v);
+                                        v_new['type']='pie';
+                                        value_list1.push(v_new);
+                                    });
+                                    $(divtag1).highcharts({
+                                        chart: {
+                                            plotBackgroundColor: null,
+                                            plotBorderWidth: null,
+                                            plotShadow: false
+                                        },
+                                        title: {
+                                            text: value_list1[0].name
+                                        },
+                                        tooltip: {
+                                            headerFormat: '{series.name}<br>',
+                                            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+                                        },
+                                        plotOptions: {
+                                            pie: {
+                                                allowPointSelect: true,
+                                                cursor: 'pointer',
+                                                dataLabels: {
+                                                    enabled: false
+                                                },
+                                                showInLegend: true
+                                            }
+                                        },
+                                        credits: {
+                                            enabled: false
+                                        },
+                                        series: [value_list1[0]]
+                                    });
+                                    $(divtag2).highcharts({
+                                        chart: {
+                                            plotBackgroundColor: null,
+                                            plotBorderWidth: null,
+                                            plotShadow: false
+                                        },
+                                        title: {
+                                            text: value_list1[1].name
+                                        },
+                                        tooltip: {
+                                            headerFormat: '{series.name}<br>',
+                                            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+                                        },
+                                        plotOptions: {
+                                            pie: {
+                                                allowPointSelect: true,
+                                                cursor: 'pointer',
+                                                dataLabels: {
+                                                    enabled: false
+                                                },
+                                                showInLegend: true
+                                            }
+                                        },
+                                        credits: {
+                                            enabled: false
+                                        },
+                                        series: [value_list1[1]]
+                                    });
+                                    $(divtag3).highcharts({
+                                        chart: {
+                                            type: 'column',
+                                            options3d: {
+                                                enabled: true,
+                                                alpha: 15,
+                                                beta: 15,
+                                                viewDistance: 25,
+                                                depth: 40
+                                            },
+                                            marginTop: 80,
+                                            marginRight: 40
+                                        },
+                                        title: {
+                                            text: menu_text
+                                        },
+                                        xAxis: {
+                                            categories: x_label
+                                        },
+                                        yAxis: {
+                                            allowDecimals: false,
+                                            min: 0,
+                                            title: {
+                                                text: '任务数量'
+                                            }
+                                        },
+                                        tooltip: {
+                                            headerFormat: '<b>{point.key}</b><br>',
+                                            pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                                        },
+                                        plotOptions: {
+                                            column: {
+                                                stacking: 'normal',
+                                                depth: 40
+                                            }
+                                        },
+                                        series: value_list,
+                                                                                credits: {
+                                            enabled: false
+                                        },
+                                    })
+
+                                }
+
+                            }
+                        })
+                    });
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

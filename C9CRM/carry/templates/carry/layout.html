@@ -17,15 +17,7 @@
 	<script src="{% static 'carry/js/bootstrap.min.js' %}" type="text/javascript"></script>
 	<script src="{% static 'carry/js/nifty.min.js' %}" type="text/javascript"></script>
 	<style>
-		{
-		#
-		{
-		%
-		rbac_css
-		%
-		}
-		#
-		}
+{#		{%  rbac_css  %}#}
 	</style>
 	{% block css %}{% endblock %}
 </head>
@@ -361,10 +353,7 @@
 </div>
 <script>
     $(function () {
-        {#        {%
-            rbac_js %
-        }#
-        }
+        {#  {%rbac_js %}#}
     });
 </script>
 {% block js %} {% endblock %}

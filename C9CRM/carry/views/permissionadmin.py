@@ -1,5 +1,6 @@
 # _*_coding:utf-8_*_
 # Author:xupan
+from django.conf import settings
 from django.shortcuts import render
 
 from carry.service import carry
@@ -20,7 +21,6 @@ class PermissionAdmin(carry.BaseCarryModal):
         return urls
 
     def show(self, request):
-        print(request.method)
-        current_user_id = request.session['user_info']['nid']
-
-        return render(request, 'permission_show.html')
+        permission_url_list = request.session.get(settings.RBAC_PERMISSION_URL_SESSION_KEY)
+        tpl = "你的权限有：<br/>" + ("<br/>".join(permission_url_list))
+        return render(request, 'permission_show.html', {'tpl': tpl})

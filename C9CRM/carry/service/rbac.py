@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-import re
 from django.conf import settings
+
 from .. import models
 
 

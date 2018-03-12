@@ -1,8 +1,9 @@
-<table class="table table-hover footable" data-filter="#filter" data-filter-minimum="1">
+<table class="table table-hover footable"
+       data-filter="#filter" data-filter-minimum="1" data-sort="True" data-limit-navigation="5">
 	<thead>
 	<tr>
 		{% for item in headers %}
-		<th>{{ item }}</th>
+		<th class="col-lg-1">{{ item }}</th>
 		{% endfor %}
 	</tr>
 	</thead>
@@ -15,4 +16,12 @@
 	</tr>
 	{% endfor %}
 	</tbody>
+{#     /* 前段 分页；后端分页取消，可以有排序功能 */#}
+    <tfoot>
+    <tr>
+        <td colspan="5">
+            <div class="pagination-centered hide-if-no-paging"></div>
+        </td>
+    </tr>
+    </tfoot>
 </table>

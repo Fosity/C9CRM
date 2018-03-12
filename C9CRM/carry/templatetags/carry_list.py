@@ -35,8 +35,7 @@ def result_body_list(change_list):
             yield [str(row), ]
         else:
             yield [name(change_list.carry_modal, obj=row)
-                   if isinstance(name, FunctionType) else getattr(row, name)
-                   for name in change_list.list_display]
+                   if isinstance(name, FunctionType) else getattr(row, name) for name in change_list.list_display]
 
 
 @register.inclusion_tag('carry/change_list_results.html')
