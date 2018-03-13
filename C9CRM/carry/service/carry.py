@@ -3,6 +3,7 @@ import copy
 import json
 from types import FunctionType
 
+from django.conf import settings
 from django.db.models import ForeignKey, ManyToManyField
 from django.forms import ModelForm
 from django.http.request import QueryDict
@@ -10,6 +11,9 @@ from django.shortcuts import redirect, render
 from django.template.response import SimpleTemplateResponse, TemplateResponse
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from carry.utils.pageinfo import PageInfo
 
 
 def model_to_dict(instance, fields=None, exclude=None):
@@ -138,11 +142,11 @@ class ChangeList(object):
         query_params = copy.copy(request.GET)
         query_params._mutable = True
         ############ 后端 分页功能，前端也具备了分页功能，
-        # self.pager = PageInfo(self.request.GET.get('page'), all_count, per_page=settings.PER_PAGE_NUM,
-        #                       base_url=self.carry_modal.changelist_url(),
-        #                       page_param_dict=query_params)
-        # self.result_list = result_list[self.pager.start:self.pager.end]
-        self.result_list = result_list
+        self.pager = PageInfo(self.request.GET.get('page'), all_count, per_page=settings.PER_PAGE_NUM,
+                              base_url=self.carry_modal.changelist_url(),
+                              page_param_dict=query_params, show_page=settings.PAGE_LIST_NUM)
+        self.result_list = result_list[self.pager.start:self.pager.end]
+        # self.result_list = result_list
 
     def add_btn(self):
         """
@@ -317,6 +321,7 @@ class BaseCarryModal(object):
 
     """增删改查方法"""
 
+    @method_decorator(cache_page(40))
     def changelist_view(self, request):
         """
         显示数据列表
@@ -356,11 +361,7 @@ class BaseCarryModal(object):
         ], context)
 
     def add_view(self, request):
-        """
-        添加页面
-        :param request:
-        :return:
-        """
+        """    添加页面    """
 
         if request.method == 'GET':
             form = self.get_model_form_cls()
@@ -393,12 +394,7 @@ class BaseCarryModal(object):
         ], context)
 
     def delete_view(self, request, pk):
-        """
-        删除
-        :param request:
-        :param pk:
-        :return:
-        """
+        """    删除    """
         self.model_class.objects.filter(pk=pk).delete()
         _change_filter = request.GET.get('_change_filter')
         if _change_filter:
@@ -408,12 +404,7 @@ class BaseCarryModal(object):
         return redirect(change_list_url)
 
     def change_view(self, request, pk):
-        """
-        修改页面
-        :param request:
-        :param pk:
-        :return:
-        """
+        """  修改页面   """
         obj = self.model_class.objects.filter(pk=pk).first()
         if request.method == 'GET':
             form = self.get_model_form_cls(instance=obj)
@@ -440,13 +431,9 @@ class BaseCarryModal(object):
             'carry/change.html'
         ], context)
 
+    @method_decorator(cache_page(60 * 3))
     def detail_view(self, request, pk):
-        """
-        查看详细
-        :param request:
-        :param pk:
-        :return:
-        """
+        """ 查看详细   """
         row = self.model_class.objects.filter(pk=pk).first()
         fields = self.get_model_form_cls.Meta.fields
         if fields == '__all__':
@@ -468,7 +455,6 @@ class BaseCarryModal(object):
 
 class CarrySite(object):
     """
-
     """
 
     def __init__(self, app_name='carry', namespace='carry'):
@@ -505,11 +491,7 @@ class CarrySite(object):
         return self.get_urls(), self.app_name, self.namespace
 
     def login(self, request):
-        """
-        用户登录
-        :param request:
-        :return:
-        """
+        """ 用户登录  """
         if request.method == 'GET':
             return render(request, 'login.html')
         else:
@@ -527,20 +509,13 @@ class CarrySite(object):
                 return render(request, 'login.html')
 
     def logout(self, request):
-        """
-        用户注销
-        :param request:
-        :return:
-        """
+        """ 用户注销  """
         request.session.delete(request.session.session_key)
         return redirect('/carry/login/')
 
+    @method_decorator(cache_page(60 * 5))
     def index(self, request):
-        """
-        首页
-        :param request:
-        :return:
-        """
+        """ 首页  """
         return render(request, 'carry/index.html')
 
 
