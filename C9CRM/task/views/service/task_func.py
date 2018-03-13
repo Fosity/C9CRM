@@ -16,6 +16,7 @@ def menu_time_create():
 
 class Taskget(object):
     '''根据，配置文件，自定义搜索条件'''
+
     def __init__(self, month, cls_obj):
         self.task_config = taskconfig.task_config
         self.month = month
@@ -49,12 +50,14 @@ class Taskget(object):
             group_by_name = self.select_args.get('group_by')
             for k, v in self.data_obj.items():
                 self.data_obj[k] = v.values(*group_by_name)
+
     def models_data_annotate(self):
         from django.db.models import Count
         id_name = self.select_args.get('id_name')
         if self.config_month.get('y_axis', {}).get('type') == 'num':
             for k, v in self.data_obj.items():
                 self.data_obj[k] = list(v.annotate(ct=Count(id_name)))
+
     def run(self):
         self.models_data_filter()
         self.data_time_filter()

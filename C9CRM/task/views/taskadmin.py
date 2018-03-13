@@ -128,7 +128,7 @@ class TaskAdmin(carry.BaseCarryModal):
                     edit_field]
 
     def another_urls(self):
-        from django.conf.urls import url
+        from django.conf.urls import url, include
         info = self.model_class._meta.app_label, self.model_class._meta.model_name
         urls = [
             url(r'^submit/(?P<nid>\d+)/$', self.submit, name='%s_%s_submit' % info),
@@ -136,6 +136,7 @@ class TaskAdmin(carry.BaseCarryModal):
             url(r'^all_task_report.html$', self.all_task_report, name='all_task_report'),
             url(r'^report_ajax.html$', self.report_ajax, name='report_ajax'),
             url(r'^report_json.html$', self.report_json, name='report_json'),
+            url(r'^search/', include('haystack.urls')),
         ]
         return urls
 

@@ -4,19 +4,19 @@
 
 {% block content %}
     <div class="container">
-    <div class="col-md-2" id="dropdown">
-        <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="true" name="00">
-                全年信息
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="dropdownMenuul1">
-            </ul>
+        <div class="" id="dropdown">
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="true" name="00">
+                    全年信息
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="dropdownMenuul1">
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="col-md-10" id="createHighChart">
-    </div>
+        <div class="" id="createHighChart">
+        </div>
     </div>
     <div style="height:50px"></div>
 {% endblock %}
@@ -30,7 +30,7 @@
             $.ajax({
                 url: '{% url 'carry:report_ajax' %}',
                 type: "POST",
-                data:{'csrfmiddlewaretoken':"{{ csrf_token }}"},
+                data: {'csrfmiddlewaretoken': "{{ csrf_token }}"},
                 dataType: 'JSON',
                 success: function (arg) {
                     $("#dropdownMenuul1").empty();
@@ -53,7 +53,7 @@
                         $.ajax({
                             url: "{% url 'carry:report_json' %}",
                             type: "POST",
-                            data: {'menu1': name_id,'csrfmiddlewaretoken':"{{ csrf_token }}"},
+                            data: {'menu1': name_id, 'csrfmiddlewaretoken': "{{ csrf_token }}"},
                             dataType: 'JSON',
                             success: function (arg) {
                                 $("#createHighChart").empty();
@@ -75,9 +75,9 @@
                                     var value_list1 = Array();
                                     $.each(arg.data.series, function (k, v) {
                                         value_list.push(v);
-                                        var v_new={};
-                                        $.extend(true,v_new,v);
-                                        v_new['type']='pie';
+                                        var v_new = {};
+                                        $.extend(true, v_new, v);
+                                        v_new['type'] = 'pie';
                                         value_list1.push(v_new);
                                     });
                                     $(divtag1).highcharts({
@@ -173,7 +173,7 @@
                                             }
                                         },
                                         series: value_list,
-                                                                                credits: {
+                                        credits: {
                                             enabled: false
                                         },
                                     })
@@ -188,4 +188,5 @@
         });
 
     </script>
+
 {% endblock %}

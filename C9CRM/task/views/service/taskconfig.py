@@ -20,7 +20,7 @@ task_config = {
             'status': True,  ####定义x轴上是否有值
         },
         'select_args': {
-            'group_by': ['to_user__username',],
+            'group_by': ['to_user__username', ],
             'time': '2018-01-01/2019-01-01',
             'time_name': 'finish_time',
             'id_name': 'nid',
