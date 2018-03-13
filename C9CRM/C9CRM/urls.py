@@ -16,7 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 
 from carry.service import carry
+from gsearch import views
 
 urlpatterns = [
     url(r'^carry/', carry.site.urls),
+    url(r'^search/autocomplete/', views.autocomplete),
+
 ]
