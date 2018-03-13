@@ -37,9 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'carry.apps.CarryConfig',
     'task',
+    'haystack',
+    'gsearch',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',  # memcached
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +51,7 @@ MIDDLEWARE = [
     # 'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'carry.middleware.rbac.RbacMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # memcached
 ]
 
 ROOT_URLCONF = 'C9CRM.urls'
@@ -146,4 +150,25 @@ RBAC_THEME = "default"
 # ############################## RBAC权限相关配置结束 ##############################
 
 ###############################页面 配置信息 ####################################
-PER_PAGE_NUM = 15  ##页面显示个数
+PER_PAGE_NUM = 7  ##页面显示个数
+PAGE_LIST_NUM = 5  ##
+
+############################## 全文搜素引擎 ########################################
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
+
+############################### 缓存 引擎 ####################################
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'TIMEOUT': 5,
+        'LOCATION': '192.168.40.130:11211'
+    }
+}
+CACHE_MIDDLEWARE_SECONDS = 5
