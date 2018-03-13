@@ -1,5 +1,6 @@
 {% load static %}
 {% load  rbac %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
 	{% block css %}{% endblock %}
 </head>
 <body>
-<div id="container" class="effect aside-float aside-bright mainnav-lg">
+<div id="container" class="effect aside-float aside-bright mainnav-lg mainnav-fixed">
 	<!--NAVBAR-->
 	<!--===================================================-->
 	<header id="navbar">
@@ -172,6 +173,7 @@
 			<!--Page content-->
 			<!--===================================================-->
 			<div id="page-content">
+
 				{% block content %} {% endblock %}
 			</div>
 			<!--===================================================-->
