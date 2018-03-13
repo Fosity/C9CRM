@@ -1,0 +1,10 @@
+{{ object.title }}
+{{ object.introduction_content }}
+{{ object.status }}
+{{ object.create_time }}
+{{ object.wish_finish_time }}
+{{ object.finish_time }}
+{{ object.finish_content }}
+{{ object.from_user }}
+{{ object.finish_FK}}
+{{ object.to_user }}

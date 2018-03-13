@@ -1,0 +1,175 @@
+{% extends 'carry/layout.html' %}
+{% load static %}
+
+
+
+{% block content %}
+    <div class="row pad-ver bg-trans-dark">
+        <form action="" target="_blank" method="get"
+              class="autocomplete-me col-xs-12 col-sm-10 col-sm-offset-1 pad-hor">
+            <input type="text" id="id_q" name="q" class="form-control input-lg" placeholder="Search..">
+{#            <input type="submit" value="搜索">#}
+        </form>
+    </div>
+    <div class="panel ">
+{% if query %}
+                <div class="panel-body">
+
+                    <ul class="list-group bord-no " >
+
+                        {% for result in page.object_list %}
+                            <li class="list-group-item list-item-lg">
+                                <div class="media-heading mar-no">
+                                    <a id="content123" class="h4 text-primary" href="#">
+                                        nid:{{ result.object.nid }}；title：{{ result.object.title|safe }}</a>
+                                </div>
+                                <a class="btn-link text-success box-inline" href="#">http://xxxxxxxxxx</a>
+                                <p class="text-sm"><a>{{ result.object.introduction_content|safe }}</a>
+                                    <a>{{ result.object.status|safe }}</a>
+                                    <a>{{ result.object.create_time|safe }}</a>
+                                    <a>{{ result.object.finish_time|safe }}</a>
+                                    <a>{{ object.from_user|safe }}</a>
+                                    <a>{{ object.finish_FK|safe }}</a>
+                                    <a>{{ object.to_user|safe }}</a>
+                                </p>
+
+                            </li>
+                            <hr>
+                        {% empty %}
+                            <li class="list-group-item list-item-lg">
+                                <div class="media-heading mar-no">
+                                    <a class="h4 text-primary" href="#">
+                                        啥也没找到</a>
+                                </div>
+                                <a class="btn-link text-success box-inline" href="#">http://xxxxxxxxxx</a>
+                                <p class="text-sm"><a></a>
+
+                                </p>
+
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <hr class="hr-wide">
+                    <!--Pagination-->
+                    <div class="text-center">
+                        {% if page.has_previous or page.has_next %}
+                            <ul class="pagination mar-no">
+                                {% if page.has_previous %}
+                                    <li>
+                                    <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo;
+                                上一页
+                                {% if page.has_previous %}</a></li>{% endif %}
+                                |
+                                {% if page.has_next %}
+                                    <li><a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}下一页
+                                &raquo;{% if page.has_next %}</a></li>{% endif %}
+                            </ul>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+{% endif %}
+        </div>
+
+{% endblock %}
+
+{% block js %}
+     <script type="text/javascript">
+        // In a perfect world, this would be its own library file that got included
+        // on the page and only the ``$(document).ready(...)`` below would be present.
+        // But this is an example.
+        var Autocomplete = function (options) {
+            this.form_selector = options.form_selector
+            this.url = options.url || '/search/autocomplete/'
+            this.delay = parseInt(options.delay || 300)
+            this.minimum_length = parseInt(options.minimum_length || 3)
+            this.form_elem = null
+            this.query_box = null
+        }
+
+        Autocomplete.prototype.setup = function () {
+            var self = this
+
+            this.form_elem = $(this.form_selector)
+            this.query_box = this.form_elem.find('input[name=q]')
+
+            // Watch the input box.
+            this.query_box.on('keyup', function () {
+                var query = self.query_box.val()
+
+                if (query.length < self.minimum_length) {
+                    return false
+                }
+
+                self.fetch(query)
+            })
+
+            // On selecting a result, populate the search field.
+            this.form_elem.on('click', '.ac-result', function (ev) {
+                self.query_box.val($(this).text())
+                $('.ac-results').remove()
+                return false
+            })
+        }
+
+        Autocomplete.prototype.fetch = function (query) {
+            var self = this
+
+            $.ajax({
+                url: this.url
+                , data: {
+                    'q': query
+                }
+                , success: function (data) {
+                    self.show_results(data)
+                }
+            })
+        }
+
+        Autocomplete.prototype.show_results = function (data) {
+            // Remove any existing results.
+            $('.ac-results').remove()
+
+            var results = data.results || []
+            var results_wrapper = $(' <div class="panel-body ac-results"></div>')
+            var base_elem = $('<a id="content123" class="h4 text-primary" href="#"></a>')
+
+
+            var ultag=$('<ul class="list-group bord-no " ></ul>')
+
+            if (results.length > 0) {
+                for (var res_offset in results) {
+                    var hrtag=$('<hr>')
+                                var litag=$('<li class="list-group-item list-item-lg"></li>')
+                                var divtag=$('<div class="media-heading mar-no"></div>')
+                    var elem = base_elem.clone()
+                    // Don't use .html(...) here, as you open yourself to XSS.
+                    // Really, you should use some form of templating.
+                    elem.text(results[res_offset])
+
+                    divtag.append(elem)
+                    divtag.append(hrtag)
+                    litag.append(divtag)
+                    ultag.append(litag)
+
+                }
+                results_wrapper.append(ultag)
+            }
+            else {
+                var elem = base_elem.clone()
+                elem.text("No results found.")
+                results_wrapper.append(elem)
+            }
+
+            this.query_box.parent().parent().next().append(results_wrapper)
+        }
+
+        $(document).ready(function () {
+            window.autocomplete = new Autocomplete({
+                form_selector: '.autocomplete-me'
+            })
+            window.autocomplete.setup()
+        })
+    </script>
+{% endblock %}
