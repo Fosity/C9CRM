@@ -38,7 +38,7 @@ C9CRM
     |-----templates         html页面
     |-----test              测试
     |-----utils             其他工具
-    |-----websocket         页面聊天框（待开发）
+    |-----websocket         页面聊天框（基于django-channels,channel-reids)
     |-----whoosh_index      haystack缓存内容
     |-----db.sqlites        数据库
     |-----manage.py         执行文件
