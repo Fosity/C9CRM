@@ -99,9 +99,6 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
 
 # mypy
-.mypy_cache/
-.idea/
-.0001_initial/
+

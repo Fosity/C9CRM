@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'websocket',
     # 'django.contrib.admin',
     # 'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',  # memcached
+    # 'django.middleware.cache.UpdateCacheMiddleware',  # memcached
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,8 +52,8 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.AuthenticationMiddleware',
     # 'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'carry.middleware.rbac.RbacMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # memcached
+    # 'carry.middleware.rbac.RbacMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',  # memcached
 ]
 
 ROOT_URLCONF = 'C9CRM.urls'
@@ -167,8 +169,19 @@ HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'TIMEOUT': 5,
+        'TIMEOUT': 1,
         'LOCATION': '192.168.40.130:11211'
     }
 }
-CACHE_MIDDLEWARE_SECONDS = 5
+CACHE_MIDDLEWARE_SECONDS = 1
+
+############################ channels_redis 设置 #####################
+ASGI_APPLICATION = 'C9CRM.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('192.168.40.130', 6379)],
+        },
+    },
+}

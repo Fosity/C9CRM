@@ -13,13 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url,include
 
 from carry.service import carry
-from gsearch import views
+from gsearch import views as gsearch_views
 
 urlpatterns = [
     url(r'^carry/', carry.site.urls),
-    url(r'^search/autocomplete/', views.autocomplete),
-
+    url(r'^search/autocomplete/', gsearch_views.autocomplete),
 ]
