@@ -14,13 +14,10 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        print(self.scope.get('user_info'))
+		# 从scope中获得session的user_info，进行登录验证
         if self.scope.get('user_info'):
             self.accept()
-        else:
-            self.send(text_data=json.dumps({
-                'message': 'wrong connect'
-            }))
+
     def disconnect(self, close_code):
         # 离开组
         async_to_sync(self.channel_layer.group_discard)(

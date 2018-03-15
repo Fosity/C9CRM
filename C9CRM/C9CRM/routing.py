@@ -6,7 +6,7 @@ from carry import models
 
 class QueryAuthMiddleware:
     """
-    Custom middleware (insecure) that takes user IDs from the query string.
+    ASGI中间件，从scope中获取session信息，并判断
     """
 
     def __init__(self, inner):
